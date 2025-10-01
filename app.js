@@ -1,3 +1,4 @@
+/* Import required modules */
 const express = require('express');
 const mongoose = require('mongoose');
 const Campground = require('./models/campground');
@@ -32,7 +33,7 @@ app.use((req, res, next) => {
   next();
 });
 
-/* Validation middleware */
+/* Validation middlewares */
 function validateCampground(req, res, next) {
   const { error } = campgroundSchema.validate(req.body);
   if (error) {
@@ -43,7 +44,6 @@ function validateCampground(req, res, next) {
     next();
   }   
 }
-
 function validateReview(req, res, next) {
   const { error } = reviewSchema.validate(req.body);
   if (error) {
