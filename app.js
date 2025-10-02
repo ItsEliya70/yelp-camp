@@ -7,8 +7,12 @@ const ejsMate = require('ejs-mate');
 const ExpressError = require('./utils/ExpressError');
 const campgroundsRoutes = require('./routes/campgrounds');
 const reviewsRoutes = require('./routes/reviews');
+const usersRoutes = require('./routes/users');
 const session = require('express-session');
 const flash = require('connect-flash');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./models/user');
 
 /* Connect to the database */
 mongoose.connect('mongodb://localhost:27017/yelp-camp').then(() => {
@@ -37,9 +41,15 @@ app.use(session({
     }
 }));
 app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 /* Middleware to set flash messages in res.locals */
 app.use((req, res, next) => {
+    res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next();
@@ -55,7 +65,7 @@ app.use((req, res, next) => {
 /* Use routes from external files */
 app.use("/campgrounds", campgroundsRoutes);
 app.use("/campgrounds/:id/reviews", reviewsRoutes);
-
+app.use("/", usersRoutes);
 
 /* Define routes */
 app.get('/', (req, res) => {
