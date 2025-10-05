@@ -4,6 +4,7 @@ if (process.env.NODE_ENV !== "production") {
 /* Import required modules */
 const express = require('express');
 const mongoose = require('mongoose');
+const sanitizeV5 = require('./utils/mongoSanitizeV5.js');
 const methodOverride = require('method-override');
 const path = require('path');
 const ejsMate = require('ejs-mate');
@@ -33,6 +34,9 @@ app.engine('ejs', ejsMate);
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
+app.set('query parser', 'extended');
+app.use(sanitizeV5({ replaceWith: '_' }));
+
 app.use(session({
     secret: 'thisshouldbeabettersecret',
     resave: false,
@@ -72,6 +76,7 @@ app.use("/", usersRoutes);
 
 /* Define routes */
 app.get('/', (req, res) => {
+  console.log(req.query);
   res.render('home');
 });
 
