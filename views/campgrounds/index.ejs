@@ -1,8 +1,11 @@
 <%- layout('layouts/boilerplate') -%>
 
   <div id="map" class="mb-5" style="width: 100%; height: 300px;"></div>
-  <h1>All Campgrounds</h1>
-  <a href="/campgrounds/new">Add New Campground</a>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>All Campgrounds</h1>
+    <input type="text" id="search" class="form-control w-50" placeholder="Search campgrounds..." />
+    <a href="/campgrounds/new" class="btn btn-success">Create New Campground</a>
+  </div>
   <% for(let campground of campgrounds) { %>
     <div class="card mb-3">
       <div class="row">
@@ -60,7 +63,7 @@
           center: [-103.5917, 40.6699],
           zoom: 3
         });
-
+        map.addControl(new mapboxgl.NavigationControl());
         map.on('load', () => {
           // Add a new source from our GeoJSON data and
           // set the 'cluster' option to true. GL-JS will

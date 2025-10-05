@@ -72,7 +72,7 @@ app.use("/", usersRoutes);
 
 /* Define routes */
 app.get('/', (req, res) => {
-  res.redirect('/campgrounds');
+  res.render('home');
 });
 
 
