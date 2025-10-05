@@ -35,6 +35,10 @@ const campgroundSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   }
+}, { toJSON: { virtuals: true } });
+
+campgroundSchema.virtual('properties.popUpMarkup').get(function() {
+  return `<strong><a href="/campgrounds/${this._id}">${this.title}</a></strong>`;
 });
 
 /* Middleware to delete associated reviews when a campground is deleted */
