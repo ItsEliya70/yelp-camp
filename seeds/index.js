@@ -19,9 +19,16 @@ async function seedDB() {
     const camp = new Campground({
       location: `${cities[randomCity].city}, ${cities[randomCity].state}`,
       title: `${descriptors[randomDescriptor]} ${places[randomPlace]}`,
-      image: `https://picsum.photos/400?random=${Math.random()}`,
+      images: {
+        url: 'https://res-console.cloudinary.com/dupwmux7x/thumbnails/v1/image/upload/v1759586141/WWVscENhbXAvZ3hhZnF5a2NvamZpaXN1cWkxeHc=/drilldown',
+        filename: 'YelpCamp/gxafqykcojfiisuqi1xw'
+      },
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
       price: Math.floor(Math.random() * 20) + 10,
+      geometry: {
+        type: 'Point',
+        coordinates: [cities[randomCity].longitude, cities[randomCity].latitude]
+      },
       author: '68de26084a74991f3561808e'
     });
     await camp.save();

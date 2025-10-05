@@ -65,8 +65,10 @@
                   <label for="image<%=i%>">Delete</label>
                 </div>
               </div>
-
               <% }) %>
+                <% if(campground.images.length===0) { %>
+                  <p class="text-muted">No images found for this campground.</p>
+                  <% } %>
           </div>
         </div>
         <div class="mb-3">
