@@ -76,7 +76,6 @@ app.use("/", usersRoutes);
 
 /* Define routes */
 app.get('/', (req, res) => {
-  console.log(req.query);
   res.render('home');
 });
 
