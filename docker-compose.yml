@@ -1,0 +1,27 @@
+version: '3.9'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - MONGO_URI=mongodb://mongo:27017/yelpcamp
+    depends_on:
+      - mongo
+    command: npm run dev
+
+  mongo:
+    image: mongo:5
+    restart: always
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
