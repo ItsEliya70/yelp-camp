@@ -8,6 +8,7 @@ const sanitizeV5 = require('./utils/mongoSanitizeV5.js');
 const methodOverride = require('method-override');
 const path = require('path');
 const ejsMate = require('ejs-mate');
+const helmet = require("helmet");
 const ExpressError = require('./utils/ExpressError');
 const campgroundsRoutes = require('./routes/campgrounds');
 const reviewsRoutes = require('./routes/reviews');
@@ -48,6 +49,9 @@ app.use(session({
     }
 }));
 app.use(flash());
+app.use(helmet({
+  contentSecurityPolicy: false
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
