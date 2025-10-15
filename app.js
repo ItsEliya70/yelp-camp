@@ -23,7 +23,7 @@ const User = require('./models/user');
 const MongoDBStore = require("connect-mongo");
 /* Connect to the database */
 //'mongodb://localhost:27017/yelp-camp'
-mongoose.connect('mongodb+srv://eliya:8Y20500noah@cluster0.lrgd25t.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0').then(() => {
+mongoose.connect(process.env.DB_URL).then(() => {
   console.log('MongoDB connected');
 }).catch(err => {
   console.error('MongoDB connection error:', err);
@@ -42,7 +42,7 @@ app.set('query parser', 'extended');
 app.use(sanitizeV5({ replaceWith: '_' }));
 
 const store = MongoDBStore.create({
-  mongoUrl: 'mongodb+srv://eliya:8Y20500noah@cluster0.lrgd25t.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
+  mongoUrl: process.env.DB_URL,
   touchAfter: 24 * 60 * 60,
 });
 
@@ -50,9 +50,10 @@ store.on("error", function (e) {
   console.log("SESSION STORE ERROR", e);
 });
 
+const secret = process.env.SECRET;
 app.use(session({
   store,
-  secret: 'thisshouldbeabettersecret!',
+  secret,
   resave: false,
   saveUninitialized: true,
   cookie: {
