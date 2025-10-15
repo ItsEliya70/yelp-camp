@@ -1,6 +1,8 @@
 if (process.env.NODE_ENV !== "production") {
   require('dotenv').config();
 }
+
+
 /* Import required modules */
 const express = require('express');
 const mongoose = require('mongoose');
@@ -18,9 +20,10 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
-
+const MongoDBStore = require("connect-mongo");
 /* Connect to the database */
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/yelp-camp').then(() => {
+//'mongodb://localhost:27017/yelp-camp'
+mongoose.connect('mongodb+srv://eliya:8Y20500noah@cluster0.lrgd25t.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0').then(() => {
   console.log('MongoDB connected');
 }).catch(err => {
   console.error('MongoDB connection error:', err);
@@ -38,15 +41,25 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('query parser', 'extended');
 app.use(sanitizeV5({ replaceWith: '_' }));
 
+const store = MongoDBStore.create({
+  mongoUrl: 'mongodb+srv://eliya:8Y20500noah@cluster0.lrgd25t.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
+  touchAfter: 24 * 60 * 60,
+});
+
+store.on("error", function (e) {
+  console.log("SESSION STORE ERROR", e);
+});
+
 app.use(session({
-    secret: 'thisshouldbeabettersecret',
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        httpOnly: true,
-        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-        maxAge: 1000 * 60 * 60 * 24 * 7
-    }
+  store,
+  secret: 'thisshouldbeabettersecret!',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    maxAge: 1000 * 60 * 60 * 24 * 7
+  }
 }));
 app.use(flash());
 app.use(helmet({
