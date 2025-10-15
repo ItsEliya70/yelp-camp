@@ -2,6 +2,7 @@
 
 YelpCamp is a full-stack web application inspired by Yelp, where users can create, review, and explore campgrounds.  
 Built with Node.js, Express, MongoDB, and EJS, the app includes authentication, image uploads, and interactive maps.
+
 [Live Demo](https://yelp-camp-5ttx.onrender.com/)
 
 ---
